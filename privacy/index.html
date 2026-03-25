@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Insta Dash Publisher</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; }
+    header { padding: 2rem; text-align: center; border-bottom: 1px solid #222; }
+    header h1 { font-size: 1.5rem; color: #fff; }
+    header a { color: #888; text-decoration: none; font-size: 0.9rem; }
+    main { max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    h2 { font-size: 1.2rem; color: #fff; margin: 2rem 0 0.75rem; }
+    p { color: #bbb; line-height: 1.7; margin-bottom: 1rem; }
+    ul { color: #bbb; line-height: 1.7; margin: 0 0 1rem 1.5rem; }
+    footer { padding: 1.5rem; text-align: center; border-top: 1px solid #222; font-size: 0.85rem; color: #666; }
+    footer a { color: #888; text-decoration: none; margin: 0 0.75rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/">← Insta Dash Publisher</a>
+    <h1>Privacy Policy</h1>
+  </header>
+  <main>
+    <p><strong>Effective Date:</strong> March 25, 2026</p>
+
+    <h2>1. Overview</h2>
+    <p>Insta Dash Publisher ("the Service") respects your privacy. This policy explains what data we collect, how we use it, and your rights regarding that data.</p>
+
+    <h2>2. Data We Collect</h2>
+    <p>When you authorize the Service to connect to your social media accounts, we collect and store:</p>
+    <ul>
+      <li><strong>OAuth access tokens</strong> — used to publish content on your behalf. Tokens are stored encrypted in AWS Secrets Manager.</li>
+      <li><strong>Basic account information</strong> — username, user ID, and profile information provided by the platform during authorization.</li>
+      <li><strong>Video content</strong> — videos you upload for scheduled publishing. Stored in Amazon S3 with automatic expiration.</li>
+      <li><strong>Publishing metadata</strong> — timestamps, post IDs, and publishing status for content you schedule.</li>
+    </ul>
+
+    <h2>3. Data We Do Not Collect</h2>
+    <ul>
+      <li>We do not collect passwords. Authentication is handled entirely through OAuth.</li>
+      <li>We do not access your direct messages, contacts, or private content.</li>
+      <li>We do not sell, share, or rent your data to any third party.</li>
+      <li>We do not use tracking cookies or analytics on this website.</li>
+    </ul>
+
+    <h2>4. How We Use Your Data</h2>
+    <p>Your data is used exclusively to:</p>
+    <ul>
+      <li>Publish video content to your authorized social media accounts on your configured schedule.</li>
+      <li>Track publishing status so you can see what has been posted.</li>
+      <li>Refresh authentication tokens to maintain uninterrupted access to your accounts.</li>
+    </ul>
+
+    <h2>5. Data Storage and Security</h2>
+    <p>All data is stored in Amazon Web Services (AWS) infrastructure in the us-east-1 region. Access tokens are encrypted at rest using AWS Secrets Manager. Video files are stored in S3 with server-side encryption and are automatically deleted after 30 days.</p>
+
+    <h2>6. Third-Party Services</h2>
+    <p>The Service integrates with the following third-party platforms via their official APIs:</p>
+    <ul>
+      <li>Instagram (Meta Graph API)</li>
+      <li>Facebook (Meta Graph API)</li>
+      <li>TikTok (Content Posting API)</li>
+      <li>YouTube (Data API v3)</li>
+    </ul>
+    <p>Your use of these platforms is subject to their respective privacy policies and terms of service.</p>
+
+    <h2>7. Data Retention</h2>
+    <p>OAuth tokens are retained as long as your account is active. Video files are automatically deleted 30 days after publishing. You may request deletion of all your data at any time by contacting us.</p>
+
+    <h2>8. Your Rights</h2>
+    <p>You have the right to:</p>
+    <ul>
+      <li><strong>Revoke access</strong> at any time by disconnecting the app from your social media platform's settings.</li>
+      <li><strong>Request data export</strong> — we will provide all data we hold about you in a machine-readable format.</li>
+      <li><strong>Request deletion</strong> — we will permanently delete all your data within 30 days of your request.</li>
+    </ul>
+
+    <h2>9. Children's Privacy</h2>
+    <p>The Service is not intended for users under the age of 13. We do not knowingly collect data from children.</p>
+
+    <h2>10. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. The effective date at the top of this page will be updated accordingly.</p>
+
+    <h2>11. Contact</h2>
+    <p>For questions about this Privacy Policy or to exercise your data rights, contact us at: instadashpublisher@gmail.com</p>
+  </main>
+  <footer>
+    <a href="/">Home</a>
+    <a href="/terms">Terms of Service</a>
+    <p style="margin-top: 0.5rem;">&copy; 2026 Insta Dash Publisher</p>
+  </footer>
+</body>
+</html>
