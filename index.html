@@ -3,49 +3,393 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Insta Dash Publisher</title>
+  <title>Insta Dash Publisher — Automated Social Media Video Publishing</title>
+  <meta name="description" content="Schedule and publish AI-generated videos to TikTok, Instagram, YouTube, and Facebook. Automate your social media workflow with smart scheduling and multi-channel support.">
+  <link rel="icon" type="image/png" href="/app-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; display: flex; flex-direction: column; }
-    header { padding: 2rem; text-align: center; border-bottom: 1px solid #222; }
-    header h1 { font-size: 1.8rem; color: #fff; margin-bottom: 0.5rem; }
-    header p { color: #888; font-size: 1rem; }
-    main { flex: 1; max-width: 640px; margin: 0 auto; padding: 3rem 1.5rem; }
-    .hero { text-align: center; margin-bottom: 3rem; }
-    .hero h2 { font-size: 1.4rem; color: #fff; margin-bottom: 1rem; }
-    .hero p { color: #aaa; line-height: 1.6; }
-    .features { list-style: none; margin: 2rem 0; }
-    .features li { padding: 0.75rem 0; border-bottom: 1px solid #1a1a1a; color: #ccc; }
-    .features li::before { content: "→ "; color: #888; }
-    footer { padding: 1.5rem; text-align: center; border-top: 1px solid #222; font-size: 0.85rem; color: #666; }
-    footer a { color: #888; text-decoration: none; margin: 0 0.75rem; }
-    footer a:hover { color: #fff; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --purple: #6C5CE7;
+      --pink: #E84393;
+      --pink-light: #FD79A8;
+      --bg: #0B0B14;
+      --bg-card: #12121F;
+      --bg-card-hover: #1A1A2E;
+      --text: #E8E8F0;
+      --text-muted: #8888A0;
+      --text-dim: #555570;
+      --border: #1E1E35;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* Navigation */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(11,11,20,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; height: 72px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); font-weight: 700; font-size: 1.1rem; }
+    .nav-brand img { width: 36px; height: 36px; border-radius: 8px; }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { background: linear-gradient(135deg, var(--purple), var(--pink)); color: white !important; padding: 8px 20px; border-radius: 8px; font-weight: 600; }
+    .nav-cta:hover { opacity: 0.9; }
+
+    /* Hero */
+    .hero { padding: 160px 2rem 100px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 800px; height: 800px; background: radial-gradient(ellipse, rgba(108,92,231,0.12) 0%, transparent 70%); pointer-events: none; }
+    .hero-badge { display: inline-block; background: rgba(108,92,231,0.15); border: 1px solid rgba(108,92,231,0.25); color: var(--purple); padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 24px; letter-spacing: 0.5px; }
+    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.15; margin-bottom: 20px; background: linear-gradient(135deg, #fff 0%, #ccc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; max-width: 800px; margin-left: auto; margin-right: auto; }
+    .hero p { font-size: 1.15rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: linear-gradient(135deg, var(--purple), var(--pink)); color: white; padding: 14px 32px; border-radius: var(--radius-sm); font-weight: 600; font-size: 1rem; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; display: inline-block; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(108,92,231,0.3); }
+    .btn-secondary { background: var(--bg-card); border: 1px solid var(--border); color: var(--text); padding: 14px 32px; border-radius: var(--radius-sm); font-weight: 600; font-size: 1rem; text-decoration: none; transition: background 0.2s; display: inline-block; }
+    .btn-secondary:hover { background: var(--bg-card-hover); }
+
+    /* Platform logos */
+    .platforms { display: flex; justify-content: center; gap: 40px; padding: 60px 2rem 40px; opacity: 0.5; }
+    .platforms span { font-size: 0.85rem; color: var(--text-dim); font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* Section base */
+    section { padding: 100px 2rem; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-label { color: var(--purple); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+    .section-title { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; margin-bottom: 16px; color: #fff; }
+    .section-desc { color: var(--text-muted); font-size: 1.05rem; max-width: 600px; line-height: 1.7; }
+
+    /* Features grid */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-top: 60px; }
+    .feature-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px 32px; transition: border-color 0.3s, transform 0.3s; }
+    .feature-card:hover { border-color: rgba(108,92,231,0.3); transform: translateY(-4px); }
+    .feature-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; }
+    .feature-icon.purple { background: rgba(108,92,231,0.15); }
+    .feature-icon.pink { background: rgba(232,67,147,0.15); }
+    .feature-icon.blue { background: rgba(0,180,216,0.15); }
+    .feature-icon.green { background: rgba(0,210,140,0.15); }
+    .feature-icon.orange { background: rgba(255,165,0,0.15); }
+    .feature-icon.red { background: rgba(255,71,87,0.15); }
+    .feature-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; color: #fff; }
+    .feature-card p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; }
+
+    /* How it works */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 32px; margin-top: 60px; counter-reset: step; }
+    .step { position: relative; padding: 32px; }
+    .step::before { counter-increment: step; content: counter(step); display: block; width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, var(--purple), var(--pink)); color: white; font-weight: 700; font-size: 1.1rem; line-height: 40px; text-align: center; margin-bottom: 20px; }
+    .step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; color: #fff; }
+    .step p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; margin-top: 60px; }
+    .stat { text-align: center; padding: 32px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); }
+    .stat-number { font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--purple), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+
+    /* Pricing */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 60px; max-width: 900px; }
+    .price-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 32px; position: relative; }
+    .price-card.featured { border-color: var(--purple); }
+    .price-card.featured::before { content: 'POPULAR'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--purple), var(--pink)); color: white; padding: 4px 16px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; }
+    .price-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .price-amount { font-size: 2.5rem; font-weight: 800; color: #fff; }
+    .price-amount span { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+    .price-features { list-style: none; margin: 24px 0; }
+    .price-features li { padding: 8px 0; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
+    .price-features li::before { content: '✓'; color: var(--purple); font-weight: 700; }
+
+    /* FAQ */
+    .faq-list { max-width: 700px; margin-top: 60px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q { padding: 20px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #fff; font-size: 1rem; }
+    .faq-q::after { content: '+'; font-size: 1.5rem; color: var(--text-dim); transition: transform 0.2s; }
+    .faq-q.open::after { transform: rotate(45deg); color: var(--purple); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-a-inner { padding: 0 0 20px; color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; }
+
+    /* CTA */
+    .cta-section { text-align: center; background: linear-gradient(135deg, rgba(108,92,231,0.1), rgba(232,67,147,0.08)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .cta-section h2 { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 16px; }
+    .cta-section p { color: var(--text-muted); max-width: 500px; margin: 0 auto 32px; }
+
+    /* Footer */
+    footer { padding: 60px 2rem 40px; border-top: 1px solid var(--border); }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; }
+    .footer-brand p { color: var(--text-muted); font-size: 0.85rem; margin-top: 12px; line-height: 1.6; max-width: 280px; }
+    .footer-col h4 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); margin-bottom: 16px; }
+    .footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; padding: 4px 0; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom { max-width: 1200px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-dim); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .hero { padding: 130px 1.5rem 80px; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Insta Dash Publisher</h1>
-    <p>Automated content scheduling for social media creators</p>
-  </header>
-  <main>
-    <div class="hero">
-      <h2>Schedule and publish video content across platforms</h2>
-      <p>Insta Dash Publisher helps creators automate their posting workflow. Upload your videos once, and we handle scheduling and publishing to your connected social media accounts.</p>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-brand">
+        <img src="/app-icon.png" alt="Insta Dash Publisher">
+        Insta Dash Publisher
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="#get-started" class="nav-cta">Get Started</a>
+      </div>
     </div>
-    <ul class="features">
-      <li>Automated daily posting on a configurable schedule</li>
-      <li>Multi-channel support — manage multiple accounts from one dashboard</li>
-      <li>Smart scheduling with platform-optimized posting times</li>
-      <li>Queue management with drag-and-drop reordering</li>
-      <li>Performance analytics to track views and engagement</li>
-    </ul>
-  </main>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">Now supporting TikTok, Instagram, YouTube &amp; Facebook</div>
+    <h1>Publish AI-generated videos to all your social channels automatically</h1>
+    <p>Upload once, post everywhere. Insta Dash Publisher schedules and publishes your video content to TikTok, Instagram Reels, YouTube Shorts, and Facebook — on autopilot.</p>
+    <div class="hero-actions">
+      <a href="#get-started" class="btn-primary">Start Publishing Free</a>
+      <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+    </div>
+  </section>
+
+  <!-- Platforms -->
+  <div class="platforms">
+    <span>TikTok</span>
+    <span>Instagram</span>
+    <span>YouTube Shorts</span>
+    <span>Facebook Reels</span>
+  </div>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="section-inner">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Everything you need to grow on social media</h2>
+      <p class="section-desc">One dashboard to manage all your channels. Smart scheduling, performance analytics, and AI-powered optimization — built for creators.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon purple">📅</div>
+          <h3>Smart Scheduling</h3>
+          <p>AI-optimized posting times for each platform and channel. Post at the exact moment your audience is most active to maximize reach and engagement.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon pink">📱</div>
+          <h3>Multi-Platform Publishing</h3>
+          <p>Publish to TikTok, Instagram Reels, YouTube Shorts, and Facebook Reels from a single upload. No more logging into four different apps.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon blue">📊</div>
+          <h3>Performance Analytics</h3>
+          <p>Track views, engagement, watch time, and audience growth across all platforms in one unified dashboard. Identify what content works best.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon green">🔄</div>
+          <h3>Queue Management</h3>
+          <p>Drag-and-drop queue reordering, batch uploads, and automatic queue refill. Your content pipeline never runs dry.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon orange">🧠</div>
+          <h3>Content Intelligence</h3>
+          <p>AI-powered analysis of your top-performing content. Get recommendations on what to post next based on proven engagement patterns.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon red">🔒</div>
+          <h3>Secure OAuth</h3>
+          <p>Connect your accounts securely through official platform OAuth. We never store your passwords. Revoke access anytime with one click.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" style="background: var(--bg-card);">
+    <div class="section-inner">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">Get started in three simple steps</h2>
+      <p class="section-desc">From zero to automated publishing in under five minutes.</p>
+
+      <div class="steps">
+        <div class="step">
+          <h3>Connect Your Accounts</h3>
+          <p>Link your TikTok, Instagram, YouTube, and Facebook accounts through secure OAuth. One-click authorization — no passwords shared.</p>
+        </div>
+        <div class="step">
+          <h3>Upload Your Content</h3>
+          <p>Upload videos to your content queue. Support for batch uploads, drag-and-drop reordering, and automatic AI caption generation.</p>
+        </div>
+        <div class="step">
+          <h3>Publish on Autopilot</h3>
+          <p>Set your schedule and let Insta Dash do the rest. Your videos are published at optimal times with platform-specific captions and hashtags.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section>
+    <div class="section-inner">
+      <div class="section-label">Trusted by Creators</div>
+      <h2 class="section-title">Built for serious content creators</h2>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Platforms Supported</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Automated Publishing</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">5+</div>
+          <div class="stat-label">Channels Per Account</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">99.9%</div>
+          <div class="stat-label">Uptime Reliability</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" style="background: var(--bg-card);">
+    <div class="section-inner">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Simple, transparent pricing</h2>
+      <p class="section-desc">Start free, upgrade when you need more. No hidden fees.</p>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>Starter</h3>
+          <div class="price-amount">Free</div>
+          <ul class="price-features">
+            <li>1 channel per platform</li>
+            <li>5 scheduled posts per week</li>
+            <li>Basic analytics</li>
+            <li>Manual queue management</li>
+            <li>Community support</li>
+          </ul>
+          <a href="#get-started" class="btn-secondary" style="width:100%;text-align:center;">Get Started</a>
+        </div>
+        <div class="price-card featured">
+          <h3>Creator Pro</h3>
+          <div class="price-amount">$9<span>/month</span></div>
+          <ul class="price-features">
+            <li>Up to 5 channels per platform</li>
+            <li>Unlimited scheduled posts</li>
+            <li>Advanced analytics &amp; insights</li>
+            <li>AI content intelligence</li>
+            <li>Smart scheduling optimization</li>
+            <li>Priority support</li>
+          </ul>
+          <a href="#get-started" class="btn-primary" style="width:100%;text-align:center;">Start Free Trial</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="section-inner">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Frequently asked questions</h2>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.style.maxHeight=this.classList.contains('open')?this.nextElementSibling.scrollHeight+'px':'0'">
+            Which social media platforms are supported?
+          </div>
+          <div class="faq-a"><div class="faq-a-inner">Insta Dash Publisher currently supports TikTok, Instagram Reels, YouTube Shorts, and Facebook Reels. We publish directly to each platform using their official APIs, ensuring full compatibility and compliance.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.style.maxHeight=this.classList.contains('open')?this.nextElementSibling.scrollHeight+'px':'0'">
+            How does the OAuth connection work?
+          </div>
+          <div class="faq-a"><div class="faq-a-inner">When you connect a platform, you're redirected to that platform's official login page (TikTok, Google, Meta). You authorize Insta Dash Publisher to post on your behalf. We never see or store your password. You can revoke access at any time from your account settings or directly from the platform.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.style.maxHeight=this.classList.contains('open')?this.nextElementSibling.scrollHeight+'px':'0'">
+            Can I manage multiple TikTok accounts?
+          </div>
+          <div class="faq-a"><div class="faq-a-inner">Yes. You can connect up to 5 separate TikTok accounts and manage them all from one dashboard. Each account has its own content queue, posting schedule, and analytics.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.style.maxHeight=this.classList.contains('open')?this.nextElementSibling.scrollHeight+'px':'0'">
+            What video formats are supported?
+          </div>
+          <div class="faq-a"><div class="faq-a-inner">We support MP4 and MOV files in vertical (9:16) format, optimized for short-form video platforms. Videos should be between 3 seconds and 60 seconds for best performance. We automatically validate format and duration before publishing.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.style.maxHeight=this.classList.contains('open')?this.nextElementSibling.scrollHeight+'px':'0'">
+            Is my data secure?
+          </div>
+          <div class="faq-a"><div class="faq-a-inner">Absolutely. All API tokens are encrypted at rest and in transit. We use official OAuth 2.0 flows for all platform connections. Your videos are stored on encrypted AWS infrastructure and are only accessed during the publishing process. See our <a href="/privacy" style="color:var(--purple);">Privacy Policy</a> for full details.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.style.maxHeight=this.classList.contains('open')?this.nextElementSibling.scrollHeight+'px':'0'">
+            Can I cancel anytime?
+          </div>
+          <div class="faq-a"><div class="faq-a-inner">Yes. The Starter plan is always free. If you're on Creator Pro, you can cancel anytime from your account settings. There are no contracts or cancellation fees. Your content and analytics data remain available for 30 days after cancellation.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="get-started" class="cta-section">
+    <h2>Ready to automate your social media?</h2>
+    <p>Join creators who save hours every week with automated publishing. Start free — no credit card required.</p>
+    <a href="mailto:support@instadashpublisher.com" class="btn-primary">Get Started Free</a>
+  </section>
+
+  <!-- Footer -->
   <footer>
-    <p>
-      <a href="/terms">Terms of Service</a>
-      <a href="/privacy">Privacy Policy</a>
-    </p>
-    <p style="margin-top: 0.5rem;">&copy; 2026 Insta Dash Publisher</p>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/" class="nav-brand">
+          <img src="/app-icon.png" alt="Insta Dash Publisher" style="width:32px;height:32px;border-radius:8px;">
+          Insta Dash Publisher
+        </a>
+        <p>Automated social media publishing for creators. Schedule and publish AI-generated videos to TikTok, Instagram, YouTube, and Facebook.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Platforms</h4>
+        <a href="#features">TikTok</a>
+        <a href="#features">Instagram</a>
+        <a href="#features">YouTube</a>
+        <a href="#features">Facebook</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="/terms">Terms of Service</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="mailto:support@instadashpublisher.com">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Insta Dash Publisher. All rights reserved.</span>
+      <span>Made for creators, by creators.</span>
+    </div>
   </footer>
+
 </body>
 </html>
